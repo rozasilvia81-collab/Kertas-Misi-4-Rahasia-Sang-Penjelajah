@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MISI 4 — RAHASIA SANG PENJELAJAH</title>
+    <style>
+        /* ==========================================================================
+           1. CSS RESET & VIEWPORT LOCK
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #090e17;
+            background-image: 
+                radial-gradient(circle at 50% 50%, #111a2e 0%, #080c14 80%),
+                radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 0);
+            background-size: 100% 100%, 24px 24px;
+            color: #f8fafc;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==========================================================================
+           2. HEADER COMPACT (SKOR DIHAPUS)
+           ========================================================================== */
+        header {
+            height: 48px;
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 2px solid #f59e0b;
+            padding: 0 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 900;
+            font-size: clamp(0.9rem, 1.3vw, 1.2rem);
+            color: #fbbf24;
+            letter-spacing: 0.8px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            background: #f59e0b;
+            color: #000;
+            border-color: #f59e0b;
+        }
+
+        /* ==========================================================================
+           3. MAIN CONTAINER & PAGES
+           ========================================================================== */
+        main {
+            flex: 1;
+            width: 100vw;
+            height: calc(100vh - 48px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: none;
+            padding: 16px;
+            box-sizing: border-box;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .page.active { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* BUTTONS & COMMON CARDS */
+        .btn-action {
+            background: linear-gradient(135deg, #ea580c, #c2410c);
+            color: white;
+            border: 2px solid #f97316;
+            padding: 12px 28px;
+            font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+            font-weight: 800;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
+            transition: 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.6);
+            background: linear-gradient(135deg, #f97316, #ea580c);
+        }
+
+        .btn-action:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .card-box {
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #f59e0b;
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+            text-align: center;
+            max-width: 680px;
+            width: 90%;
+        }
+
+        /* PAGE 0: WELCOME LANDING PAGE */
+        .welcome-card {
+            background: rgba(13, 21, 37, 0.95);
+            border: 2px solid #f59e0b;
+            border-radius: 24px;
+            padding: clamp(20px, 4vh, 36px) clamp(24px, 4vw, 48px);
+            box-shadow: 0 0 35px rgba(245, 158, 11, 0.25);
+            text-align: center;
+            width: 100%;
+            max-width: 820px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .welcome-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 900;
+            color: #fbbf24;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .welcome-subtitle {
+            font-size: clamp(1rem, 1.4vw, 1.3rem);
+            font-style: italic;
+            color: #f97316;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .welcome-desc-box {
+            background: rgba(10, 16, 28, 0.85);
+            border-left: 4px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 28px;
+            width: 100%;
+            text-align: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .welcome-desc-text {
+            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+            color: #e2e8f0;
+            line-height: 1.65;
+            font-weight: 500;
+        }
+
+        /* PAGE 1: PILIH NEGARA */
+        .nation-title {
+            font-size: clamp(1.4rem, 2.5vw, 2.2rem);
+            color: #fbbf24;
+            margin-bottom: 6px;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.3);
+        }
+
+        .nation-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .nation-card {
+            background: rgba(15, 23, 42, 0.9);
+            border: 3px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nation-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            border-color: #fbbf24;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+
+        .nation-card[data-nation="portugis"] { border-top: 6px solid #ef4444; }
+        .nation-card[data-nation="spanyol"] { border-top: 6px solid #f59e0b; }
+        .nation-card[data-nation="belanda"] { border-top: 6px solid #3b82f6; }
+        .nation-card[data-nation="inggris"] { border-top: 6px solid #a855f7; }
+
+        .nation-flag { font-size: clamp(2.5rem, 4vw, 3.5rem); }
+        .nation-name { font-size: clamp(1rem, 1.4vw, 1.3rem); font-weight: 800; color: #fff; }
+
+        /* PAGE 2: PASSWORD ENTRY */
+        .pass-input {
+            background: rgba(0,0,0,0.5);
+            border: 3px solid #f59e0b;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 1.8rem;
+            color: #fbbf24;
+            text-align: center;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            outline: none;
+            width: 220px;
+            margin: 16px 0;
+        }
+
+        /* PAGE 3: MIND MAP CANVAS */
+        #page-3 {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 6px 12px;
+        }
+        #page-3.active { display: flex; }
+
+        .mindmap-header {
+            text-align: center;
+            height: 38px;
+        }
+        .mindmap-title { font-size: clamp(1.05rem, 1.45vw, 1.35rem); color: #fbbf24; font-weight: 900; }
+        .mindmap-subtitle { font-size: clamp(0.75rem, 0.9vw, 0.85rem); color: #94a3b8; }
+
+        .mindmap-area {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .mindmap-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .mindmap-svg path {
+            fill: none;
+            stroke-dasharray: 6;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash { to { stroke-dashoffset: -1000; } }
+
+        .node-center {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: clamp(125px, 13vw, 155px);
+            height: clamp(125px, 13vw, 155px);
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: 4px solid #fff;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            text-align: center;
+            padding: 8px;
+        }
+        .node-center-flag { font-size: clamp(1.8rem, 2.5vw, 2.8rem); }
+        .node-center-title { font-size: clamp(0.9rem, 1.2vw, 1.2rem); font-weight: 900; color: #000; text-transform: uppercase; }
+
+        .node-branch {
+            position: absolute;
+            width: clamp(240px, 27vw, 330px);
+            min-height: clamp(90px, 13vh, 120px);
+            border-radius: 16px;
+            padding: 8px 12px;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .node-branch-title {
+            font-size: clamp(0.85rem, 1.1vw, 1.05rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .drop-zone {
+            width: 100%;
+            flex: 1;
+            border: 2px dashed rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6px 10px;
+            font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+            font-weight: 800;
+            color: rgba(255,255,255,0.7);
+            transition: 0.2s ease;
+            cursor: pointer;
+            line-height: 1.35;
+        }
+
+        .drop-zone.highlight {
+            background: rgba(255,255,255,0.35);
+            border-color: #fff;
+            transform: scale(1.03);
+        }
+
+        .drop-zone.filled {
+            border-style: solid;
+            background: rgba(0,0,0,0.45);
+            color: #fff;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .drop-zone.filled::after {
+            content: '↺ klik untuk ganti';
+            position: absolute;
+            bottom: 2px;
+            right: 6px;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.75);
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .node-tokoh { top: 2%; left: 15%; background: #06b6d4; border: 3px solid #67e8f9; color: #000; }
+        .node-tempat { top: 2%; right: 15%; background: #10b981; border: 3px solid #6ee7b7; color: #000; }
+        .node-tujuan { top: 48%; left: 2%; transform: translateY(-50%); background: #ec4899; border: 3px solid #f472b6; color: #000; }
+        .node-positif { top: 48%; right: 2%; transform: translateY(-50%); background: #8b5cf6; border: 3px solid #c084fc; color: #fff; }
+        .node-negatif { bottom: 2%; left: 15%; background: #ef4444; border: 3px solid #fca5a5; color: #fff; }
+        .node-perlawanan { bottom: 2%; right: 15%; background: #eab308; border: 3px solid #fef08a; color: #000; }
+
+        .answers-tray {
+            height: clamp(105px, 17vh, 145px);
+            width: 100%;
+            max-width: 1280px;
+            margin: 6px auto 0 auto;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #f59e0b;
+            border-radius: 16px;
+            padding: 8px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .answers-tray-title {
+            font-size: clamp(0.75rem, 0.9vw, 0.85rem);
+            font-weight: 800;
+            color: #fbbf24;
+            text-transform: uppercase;
+        }
+
+        .answers-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .card-answer {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: clamp(0.75rem, 0.85vw, 0.9rem);
+            font-weight: 800;
+            cursor: grab;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+            touch-action: none;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        .card-answer:active { cursor: grabbing; }
+
+        .card-c1 { background: #38bdf8; color: #0f172a; border: 2px solid #7dd3fc; }
+        .card-c2 { background: #4ade80; color: #0f172a; border: 2px solid #86efac; }
+        .card-c3 { background: #f472b6; color: #0f172a; border: 2px solid #fbcfe8; }
+        .card-c4 { background: #c084fc; color: #0f172a; border: 2px solid #e9d5ff; }
+        .card-c5 { background: #fca5a5; color: #0f172a; border: 2px solid #fecaca; }
+        .card-c6 { background: #facc15; color: #0f172a; border: 2px solid #fef08a; }
+
+        .drag-clone {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 15px rgba(251, 191, 36, 0.6);
+            opacity: 0.95;
+            font-size: 1rem;
+        }
+
+        /* PAGE 4: PRESENTATION MODE */
+        #page-4 { background: #090d16; padding: 10px; }
+
+        .pres-container {
+            width: 100%;
+            max-width: 1150px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pres-header { text-align: center; }
+        .pres-badge {
+            background: #f59e0b;
+            color: #000;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .pres-card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+            flex: 1;
+            margin: 10px 0;
+        }
+
+        .pres-item {
+            background: rgba(30, 41, 59, 0.95);
+            border: 2px solid var(--item-color, #f59e0b);
+            border-radius: 14px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .pres-item-title {
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--item-color, #f59e0b);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 4px;
+        }
+
+        .pres-item-body {
+            font-size: clamp(0.9rem, 1.15vw, 1.1rem);
+            color: #fff;
+            line-height: 1.45;
+            font-weight: 600;
+        }
+
+        /* PAGE 5: PETUNJUK FINAL PASSSWORD UTAMA */
+        .instruction-box {
+            background: rgba(10, 16, 28, 0.85);
+            border: 2px dashed #f59e0b;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 18px 0 24px 0;
+            text-align: center;
+        }
+
+        .instruction-text {
+            font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+            color: #f8fafc;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        /* MODAL POPUP & EFEK KONFETI */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal-card {
+            background: rgba(15, 23, 42, 0.95);
+            border: 3px solid #f59e0b;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 460px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 35px rgba(245, 158, 11, 0.5);
+            animation: popIn 0.25s ease-out;
+            position: relative;
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .modal-icon { font-size: 3rem; margin-bottom: 8px; }
+        .modal-title { font-size: 1.3rem; color: #fbbf24; font-weight: 900; margin-bottom: 8px; }
+        .modal-desc { font-size: 0.95rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 16px; white-space: pre-line; }
+
+        /* KEYWORD HIGHLIGHT CARD */
+        .keyword-highlight-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
+            border: 2px dashed #f59e0b;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 12px 0 16px 0;
+            color: #fff;
+        }
+
+        .keyword-badge {
+            display: inline-block;
+            background: #f59e0b;
+            color: #000;
+            font-size: 1.6rem;
+            font-weight: 900;
+            padding: 4px 16px;
+            border-radius: 8px;
+            letter-spacing: 2px;
+            margin-top: 6px;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+        }
+
+        /* PARTIKEL EFEK MERIAH HARTA KARUN / PERAYAAN */
+        .confetti-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+            border-radius: 4px;
+            animation: fall 2.5s linear forwards;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+
+        @media (max-width: 900px) {
+            .pres-card-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER NAVIGATION (TANPA SKOR) -->
+    <header>
+        <div class="header-title">
+            <span>🧩</span>
+            <span>MISI 4 — RAHASIA SANG PENJELAJAH</span>
+        </div>
+        <div class="header-right">
+            <div class="header-controls">
+                <button class="icon-btn" id="sound-btn" title="Toggle Sound">🔊</button>
+                <button class="icon-btn" id="fullscreen-btn" title="Fullscreen">⛶</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- PAGE 0: LANDING PAGE DEPAN -->
+        <section id="page-0" class="page active">
+            <div class="welcome-card">
+                <h1 class="welcome-title">MISI 4: RAHASIA SANG PENJELAJAH</h1>
+                <div class="welcome-subtitle">"Susun ceritanya, temukan rahasianya!"</div>
+
+                <div class="welcome-desc-box">
+                    <p class="welcome-desc-text">
+                        Petualanganmu hampir selesai! Kali ini kamu tidak hanya menjawab pertanyaan.<br>
+                        Kamu dan kelompokmu harus menyusun potongan informasi kedatangan hingga masa penjajahan bangsa Eropa.<br><br>
+                        <strong>Susun dengan tepat, ceritakan kembali, dan buka rahasia negara pilihanmu!</strong>
+                    </p>
+                </div>
+
+                <button class="btn-action" onclick="showPage('page-1')">MULAI MISI 4 ➔</button>
+            </div>
+        </section>
+
+        <!-- PAGE 1: PILIH NEGARA -->
+        <section id="page-1" class="page">
+            <h1 class="nation-title">PILIH NEGARA KELOMPOKMU</h1>
+            <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 10px;">Pilih negara petualangan yang akan kamu susun mind map-nya:</p>
+
+            <div class="nation-grid">
+                <div class="nation-card" data-nation="portugis" onclick="chooseNation('portugis')">
+                    <span class="nation-flag">🇵🇹</span>
+                    <span class="nation-name">PORTUGIS</span>
+                </div>
+                <div class="nation-card" data-nation="spanyol" onclick="chooseNation('spanyol')">
+                    <span class="nation-flag">🇪🇸</span>
+                    <span class="nation-name">SPANYOL</span>
+                </div>
+                <div class="nation-card" data-nation="belanda" onclick="chooseNation('belanda')">
+                    <span class="nation-flag">🇳🇱</span>
+                    <span class="nation-name">BELANDA</span>
+                </div>
+                <div class="nation-card" data-nation="inggris" onclick="chooseNation('inggris')">
+                    <span class="nation-flag">🏴</span>
+                    <span class="nation-name">INGGRIS</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: PASSWORD ENTRY -->
+        <section id="page-2" class="page">
+            <div class="card-box">
+                <h2 style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 6px;">🔐 PASSWORD MISI 4</h2>
+                <p style="color: #cbd5e1; font-size: 0.9rem;" id="pass-prompt-text">Masukkan password pembuka Misi 4 untuk negara pilihanmu:</p>
+                <input type="text" id="mission-pass-input" class="pass-input" placeholder="___" maxlength="4" autocomplete="off">
+                <br>
+                <button class="btn-action" onclick="verifyMissionPassword()">BUKA MIND MAP ➔</button>
+            </div>
+        </section>
+
+        <!-- PAGE 3: MAIN MIND MAP PUZZLE -->
+        <section id="page-3" class="page">
+            <div class="mindmap-header">
+                <div class="mindmap-title">MISI 4 — PETA CERITA SANG PENJELAJAH</div>
+                <div class="mindmap-subtitle">Seret kartu jawaban ke posisi yang pas. Klik jawaban yang sudah terpasang jika ingin mengganti!</div>
+            </div>
+
+            <div class="mindmap-area" id="mindmap-area">
+                <svg class="mindmap-svg" id="mindmap-svg"></svg>
+
+                <div class="node-center" id="node-center">
+                    <span class="node-center-flag" id="center-flag">🇵🇹</span>
+                    <span class="node-center-title" id="center-title">PORTUGIS</span>
+                </div>
+
+                <div class="node-branch node-tokoh">
+                    <div class="node-branch-title">👤 TOKOH & TAHUN</div>
+                    <div class="drop-zone" data-key="tokoh" onclick="resetSingleSlot('tokoh')">DROP JAWABAN DI SINI</div>
+                </div>
+
+                <div class="node-branch node-tempat">
+                    <div class="node-branch-title">📍 TEMPAT & JALUR</div>
+                    <div class="drop-zone" data-key="tempat" onclick="resetSingleSlot('tempat')">DROP JAWABAN DI SINI</div>
+                </div>
+
+                <div class="node-branch node-tujuan">
+                    <div class="node-branch-title">🎯 TUJUAN & KEBIJAKAN</div>
+                    <div class="drop-zone" data-key="tujuan" onclick="resetSingleSlot('tujuan')">DROP JAWABAN DI SINI</div>
+                </div>
+
+                <div class="node-branch node-positif">
+                    <div class="node-branch-title">✅ DAMPAK POSITIF</div>
+                    <div class="drop-zone" data-key="positif" onclick="resetSingleSlot('positif')">DROP JAWABAN DI SINI</div>
+                </div>
+
+                <div class="node-branch node-negatif">
+                    <div class="node-branch-title">❌ DAMPAK NEGATIF</div>
+                    <div class="drop-zone" data-key="negatif" onclick="resetSingleSlot('negatif')">DROP JAWABAN DI SINI</div>
+                </div>
+
+                <div class="node-branch node-perlawanan">
+                    <div class="node-branch-title">⚔️ PERLAWANAN & AKHIR</div>
+                    <div class="drop-zone" data-key="perlawanan" onclick="resetSingleSlot('perlawanan')">DROP JAWABAN DI SINI</div>
+                </div>
+            </div>
+
+            <div class="answers-tray">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <span class="answers-tray-title">📦 PILIHAN JAWABAN (SERET KE NODE ATAS)</span>
+                    <button class="btn-action" id="check-btn" onclick="checkMindMap()" style="padding: 4px 14px; font-size: 0.85rem;" disabled>🔍 PERIKSA MIND MAP</button>
+                </div>
+                <div class="answers-grid" id="answers-grid"></div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: MODE PRESENTASI -->
+        <section id="page-4" class="page">
+            <div class="pres-container">
+                <div class="pres-header">
+                    <span class="pres-badge">🎤 MODE PRESENTASI</span>
+                    <h2 style="color: #fbbf24; font-size: 1.35rem; margin-top: 4px;" id="pres-country-title">PETA CERITA PERJALANAN</h2>
+                    <p style="color: #94a3b8; font-size: 0.85rem;">Gunakan layar infografis ini untuk menceritakan hasil kelompokmu ke depan kelas!</p>
+                </div>
+
+                <div class="pres-card-grid" id="pres-card-grid"></div>
+
+                <button class="btn-action" onclick="finishPresentation()">PRESENTASI SELESAI ➔</button>
+            </div>
+        </section>
+
+        <!-- PAGE 5: FINISH & INSTRUCTION PAGE (DASHBOARD REDIRECT) -->
+        <section id="page-5" class="page">
+            <div class="card-box">
+                <div style="font-size: 3.5rem; margin-bottom: 8px;">🏆</div>
+                <h2 style="color: #fbbf24; font-size: clamp(1.4rem, 2.2vw, 1.8rem); font-weight: 900;">PRESENTASI SELESAI!</h2>
+                <h3 style="color: #4ade80; font-size: 1.1rem; margin-top: 4px; font-weight: 800;">SELAMAT, KALIAN SUDAH MENYELESAIKAN MISI 1, 2, 3, DAN 4!</h3>
+                
+                <div class="instruction-box">
+                    <p class="instruction-text">
+                        Susunlah semua <strong>password / kata rahasia</strong> yang kalian dapatkan dari Misi 1, 2, 3, dan 4 menjadi satu kata rahasia.<br><br>
+                        Kemudian, masukkan kata yang dimaksud atau kunci rahasia tersebut pada <strong>Halaman Depan Dashboard Utama</strong> untuk mengambil hadiah kalian!
+                    </p>
+                </div>
+
+                <button class="btn-action" onclick="completeMission4()">SELESAI & KEMBALI 🏠</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL POPUP -->
+    <div class="modal-overlay" id="modal-popup">
+        <div class="modal-card">
+            <div class="modal-icon" id="modal-icon">🎉</div>
+            <div class="modal-title" id="modal-title">PESAN</div>
+            <div class="modal-desc" id="modal-desc">Deskripsi modal...</div>
+            <div id="modal-extra-content"></div>
+            <button class="btn-action" id="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           DATA MISI 4
+           ========================================================================== */
+        const mission4Data = {
+            portugis: {
+                name: "Portugis",
+                flag: "🇵🇹",
+                password: "KE",
+                keyword: "H",
+                slogan: "Negeri Penjelajah, Gabus, dan Keramik Biru",
+                nodes: {
+                    tokoh: { 
+                        text: "Vasco da Gama (1498) berlayar mencari rempah, lalu Alfonso d'Albuquerque (1511) menguasai Malaka.",
+                        label: "👤 Vasco da Gama (1498) & Alfonso (1511)"
+                    },
+                    tempat: { 
+                        text: "Tiba di Malaka (1511), lalu melanjutkannya ke Maluku untuk menguasai rempah-rempah.",
+                        label: "📍 Tiba di Malaka → Maluku"
+                    },
+                    tujuan: { 
+                        text: "Mencari rempah-rempah, memonopoli perdagangan, dan membangun benteng pertahanan.",
+                        label: "🎯 Rempah-rempah, Monopoli & Benteng"
+                    },
+                    positif: { 
+                        text: "Masuknya teknologi baru (pembuatan kapal, meriam, navigasi) & pengetahuan budaya baru.",
+                        label: "✅ Teknologi Kapal, Meriam & Navigasi"
+                    },
+                    negatif: { 
+                        text: "Terjadinya penjajahan, monopoli perdagangan, dan rakyat dipaksa bekerja serta dieksploitasi.",
+                        label: "❌ Penjajahan, Monopoli & Kerja Paksa"
+                    },
+                    perlawanan: { 
+                        text: "Rakyat Ternate melawan gigih di bawah pimpinan Sultan Baabullah hingga Portugis diusir (1575).",
+                        label: "⚔️ Perlawanan Sultan Baabullah (1575)"
+                    }
+                }
+            },
+            spanyol: {
+                name: "Spanyol",
+                flag: "🇪🇸",
+                password: "P",
+                keyword: "A",
+                slogan: "Negeri Seni, Budaya, dan Sepak Bola",
+                nodes: {
+                    tokoh: { 
+                        text: "Ferdinand Magellan (1521), lalu pelayaran dilanjutkan oleh Juan Sebastian Elcano.",
+                        label: "👤 Magellan & Elcano (1521)"
+                    },
+                    tempat: { 
+                        text: "Berlayar mengelilingi dunia dari Samudra Atlantik, Pasifik, Filipina, lalu tiba di Tidore (Maluku).",
+                        label: "📍 Atlantik → Pasifik → Tidore"
+                    },
+                    tujuan: { 
+                        text: "Mencari rempah-rempah (pala/cengkeh) dan menyebarkan agama Kristen.",
+                        label: "🎯 Rempah-rempah & Menyebar Agama"
+                    },
+                    positif: { 
+                        text: "Terbukanya hubungan perdagangan dunia dan membuktikan bahwa bumi itu bulat.",
+                        label: "✅ Perdagangan Dunia & Bukti Bumi Bulat"
+                    },
+                    negatif: { 
+                        text: "Memicu persaingan sengit antarbangsa Eropa di Maluku dan perebutan kekuasaan.",
+                        label: "❌ Persaingan Dagang & Konflik Maluku"
+                    },
+                    perlawanan: { 
+                        text: "Pengaruhnya singkat karena terdesak oleh perlawanan rakyat dan persaingan dengan Belanda.",
+                        label: "⚔️ Berakhir Karena Terdesak Belanda"
+                    }
+                }
+            },
+            belanda: {
+                name: "Belanda",
+                flag: "🇳🇱",
+                password: "A",
+                keyword: "A",
+                slogan: "Negeri Kincir Angin, Sepeda, dan Inovasi!",
+                nodes: {
+                    tokoh: { 
+                        text: "Cornelis de Houtman (1596) mendarat di Banten. Pendirian VOC (1602) untuk kuasai rempah.",
+                        label: "👤 De Houtman (1596) & VOC (1602)"
+                    },
+                    tempat: { 
+                        text: "Melalui Tanjung Harapan dan Selat Sunda, mendarat di Banten lalu menguasai seluruh Nusantara.",
+                        label: "📍 Tj. Harapan → Selat Sunda → Banten"
+                    },
+                    tujuan: { 
+                        text: "Monopoli rempah (lada), keuntungan sebesar-besarnya, Sistem Tanam Paksa & Politik Adu Domba.",
+                        label: "🎯 Monopoli VOC, Tanam Paksa & Adu Domba"
+                    },
+                    positif: { 
+                        text: "Pembangunan infrastruktur (jalan, rel kereta, pelabuhan) & berkembangnya pendidikan modern.",
+                        label: "✅ Jalan, Rel Kereta & Pendidikan Modern"
+                    },
+                    negatif: { 
+                        text: "Rakyat diperas pajak, kerja paksa, kemiskinan, dan kekayaan alam dikuras ke Eropa.",
+                        label: "❌ Kerja Paksa, Pajak & Kemiskinan"
+                    },
+                    perlawanan: { 
+                        text: "Dilawan oleh Pattimura & Pangeran Diponegoro; kekuasaan Belanda berakhir saat Jepang masuk (1942).",
+                        label: "⚔️ Perlawanan Diponegoro & Akhir 1942"
+                    }
+                }
+            },
+            inggris: {
+                name: "Inggris",
+                flag: "🏴",
+                password: "MA",
+                keyword: "KA",
+                slogan: "Negeri Penjelajah, Teh, dan Sepak Bola",
+                nodes: {
+                    tokoh: { 
+                        text: "Sir James Lancaster (1613) mendarat di Aceh. Thomas Stamford Raffles (1811) menguasai Jawa.",
+                        label: "👤 Lancaster (1613) & Raffles (1811)"
+                    },
+                    tempat: { 
+                        text: "Mendirikan pos dagang di Aceh, lalu sempat menguasai Pulau Jawa dari tangan Belanda.",
+                        label: "📍 Pos Dagang Aceh → Jawa"
+                    },
+                    tujuan: { 
+                        text: "Berdagang rempah-rempah dan bersaing melawan Belanda dalam perdagangan samudra.",
+                        label: "🎯 Dagang Rempah & Persaingan EIC vs VOC"
+                    },
+                    positif: { 
+                        text: "Pembaharuan di bidang ilmu pengetahuan, sistem pemerintahan, dan infrastruktur.",
+                        label: "✅ Ilmu Pengetahuan & Reformasi Sistem"
+                    },
+                    negatif: { 
+                        text: "Perebutan wilayah kekuasaan dan konflik perang yang merugikan kerajaan lokal.",
+                        label: "❌ Perebutan Kekuasaan & Konflik"
+                    },
+                    perlawanan: { 
+                        text: "Kalah perang dagang, menandatangani Perjanjian Bungaya (1667) & Perjanjian London (1814).",
+                        label: "⚔️ Perjanjian Bungaya & Perjanjian London"
+                    }
+                }
+            }
+        };
+
+        let gameState = {
+            selectedNation: 'portugis',
+            soundEnabled: true,
+            userAnswers: { tokoh: null, tempat: null, tujuan: null, positif: null, negatif: null, perlawanan: null }
+        };
+
+        let dragInfo = {
+            active: false,
+            cardEl: null,
+            cloneEl: null,
+            dataKey: null,
+            startX: 0, startY: 0
+        };
+
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        /* EFEK SUARA */
+        function playFx(type) {
+            if (!gameState.soundEnabled) return;
+            try {
+                if (type === 'click') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.04);
+                } else if (type === 'drop') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+                } else if (type === 'wrong') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.15);
+                } else if (type === 'fanfare' || type === 'success') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, index) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        
+                        const startTime = audioCtx.currentTime + (index * 0.1);
+                        osc.frequency.setValueAtTime(freq, startTime);
+                        gain.gain.setValueAtTime(0, startTime);
+                        gain.gain.linearRampToValueAtTime(0.2, startTime + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.4);
+                        
+                        osc.start(startTime);
+                        osc.stop(startTime + 0.45);
+                    });
+                }
+            } catch(e) {}
+        }
+
+        /* EFEK KONFETI */
+        function triggerConfetti() {
+            const colors = ['#f59e0b', '#fbbf24', '#ef4444', '#3b82f6', '#10b981', '#a855f7'];
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-particle';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.width = (Math.random() * 8 + 6) + 'px';
+                confetti.style.height = (Math.random() * 14 + 8) + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 1.5 + 1.5) + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setupHeaderControls();
+        });
+
+        function setupHeaderControls() {
+            document.getElementById('sound-btn').addEventListener('click', () => {
+                gameState.soundEnabled = !gameState.soundEnabled;
+                document.getElementById('sound-btn').innerText = gameState.soundEnabled ? '🔊' : '🔇';
+            });
+
+            document.getElementById('fullscreen-btn').addEventListener('click', () => {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(e=>console.log(e));
+                } else {
+                    if (document.exitFullscreen) document.exitFullscreen();
+                }
+            });
+
+            document.body.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
+        }
+
+        function showPage(pageId) {
+            playFx('click');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            if (pageId === 'page-3') renderMindMapCanvas();
+            if (pageId === 'page-4') renderPresentationMode();
+        }
+
+        function chooseNation(nationKey) {
+            gameState.selectedNation = nationKey;
+            const data = mission4Data[nationKey];
+            document.getElementById('pass-prompt-text').innerText = `Masukkan Password Pembuka Misi 4 untuk kelompok ${data.flag} ${data.name.toUpperCase()}:`;
+            document.getElementById('mission-pass-input').value = '';
+            showPage('page-2');
+        }
+
+        function verifyMissionPassword() {
+            const input = document.getElementById('mission-pass-input').value.trim().toUpperCase();
+            const correctPass = mission4Data[gameState.selectedNation].password.toUpperCase();
+
+            if (input === correctPass) {
+                playFx('fanfare');
+                triggerConfetti();
+                showPage('page-3');
+            } else {
+                playFx('wrong');
+                showModal('❌ PASSWORD SALAH', `Password untuk ${mission4Data[gameState.selectedNation].name} belum tepat. Periksa catatan kelompokmu!`, '🔒');
+            }
+        }
+
+        function renderMindMapCanvas() {
+            const data = mission4Data[gameState.selectedNation];
+            
+            document.getElementById('center-flag').innerText = data.flag;
+            document.getElementById('center-title').innerText = data.name;
+
+            gameState.userAnswers = { tokoh: null, tempat: null, tujuan: null, positif: null, negatif: null, perlawanan: null };
+            document.querySelectorAll('.drop-zone').forEach(dz => {
+                dz.classList.remove('filled', 'highlight');
+                dz.innerText = 'DROP JAWABAN DI SINI';
+            });
+
+            const tray = document.getElementById('answers-grid');
+            tray.innerHTML = '';
+
+            const keys = ['tokoh', 'tempat', 'tujuan', 'positif', 'negatif', 'perlawanan'];
+            const shuffledKeys = [...keys].sort(() => Math.random() - 0.5);
+
+            const colorClasses = ['card-c1', 'card-c2', 'card-c3', 'card-c4', 'card-c5', 'card-c6'];
+
+            shuffledKeys.forEach((key, idx) => {
+                const nodeInfo = data.nodes[key];
+                const card = document.createElement('div');
+                card.className = `card-answer ${colorClasses[idx % colorClasses.length]}`;
+                card.innerText = nodeInfo.label;
+                card.dataset.key = key;
+
+                card.addEventListener('pointerdown', (e) => onPointerDown(e, card));
+                tray.appendChild(card);
+            });
+
+            document.getElementById('check-btn').disabled = true;
+
+            setTimeout(drawConnectingLines, 100);
+            window.addEventListener('resize', drawConnectingLines);
+        }
+
+        function drawConnectingLines() {
+            const svg = document.getElementById('mindmap-svg');
+            const area = document.getElementById('mindmap-area');
+            if (!svg || !area) return;
+
+            svg.innerHTML = '';
+            const areaRect = area.getBoundingClientRect();
+
+            const center = document.getElementById('node-center');
+            const cRect = center.getBoundingClientRect();
+            const cx = (cRect.left + cRect.width / 2) - areaRect.left;
+            const cy = (cRect.top + cRect.height / 2) - areaRect.top;
+
+            const branches = document.querySelectorAll('.node-branch');
+            branches.forEach(b => {
+                const bRect = b.getBoundingClientRect();
+                const bx = (bRect.left + bRect.width / 2) - areaRect.left;
+                const by = (bRect.top + bRect.height / 2) - areaRect.top;
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const d = `M ${cx} ${cy} Q ${(cx+bx)/2} ${(cy+by)/2 - 15} ${bx} ${by}`;
+                path.setAttribute('d', d);
+                path.setAttribute('stroke', '#f59e0b');
+                path.setAttribute('stroke-width', '3.5');
+                svg.appendChild(path);
+            });
+        }
+
+        function onPointerDown(e, cardEl) {
+            if (cardEl.dataset.placed === "true") return;
+
+            dragInfo.active = true;
+            dragInfo.cardEl = cardEl;
+            dragInfo.dataKey = cardEl.dataset.key;
+            dragInfo.startX = e.clientX;
+            dragInfo.startY = e.clientY;
+
+            const clone = cardEl.cloneNode(true);
+            clone.classList.add('drag-clone');
+            clone.style.left = `${e.clientX - 60}px`;
+            clone.style.top = `${e.clientY - 25}px`;
+            document.body.appendChild(clone);
+            dragInfo.cloneEl = clone;
+
+            cardEl.style.opacity = '0.3';
+
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerup', onPointerUp);
+        }
+
+        function onPointerMove(e) {
+            if (!dragInfo.active || !dragInfo.cloneEl) return;
+            dragInfo.cloneEl.style.left = `${e.clientX - 60}px`;
+            dragInfo.cloneEl.style.top = `${e.clientY - 25}px`;
+
+            document.querySelectorAll('.drop-zone').forEach(dz => {
+                const rect = dz.getBoundingClientRect();
+                if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    dz.classList.add('highlight');
+                } else {
+                    dz.classList.remove('highlight');
+                }
+            });
+        }
+
+        function onPointerUp(e) {
+            if (!dragInfo.active) return;
+
+            let droppedOnZone = null;
+            document.querySelectorAll('.drop-zone').forEach(dz => {
+                dz.classList.remove('highlight');
+                const rect = dz.getBoundingClientRect();
+                if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    droppedOnZone = dz;
+                }
+            });
+
+            if (droppedOnZone) {
+                const targetKey = droppedOnZone.dataset.key;
+                if (gameState.userAnswers[targetKey]) {
+                    resetSingleSlot(targetKey);
+                }
+
+                droppedOnZone.innerText = dragInfo.cardEl.innerText;
+                droppedOnZone.classList.add('filled');
+                gameState.userAnswers[targetKey] = dragInfo.dataKey;
+
+                dragInfo.cardEl.style.display = 'none';
+                dragInfo.cardEl.dataset.placed = "true";
+                playFx('drop');
+            } else {
+                dragInfo.cardEl.style.opacity = '1';
+                playFx('wrong');
+            }
+
+            if (dragInfo.cloneEl) {
+                dragInfo.cloneEl.remove();
+                dragInfo.cloneEl = null;
+            }
+
+            dragInfo.active = false;
+            window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('pointerup', onPointerUp);
+
+            checkAllSlotsFilled();
+        }
+
+        function resetSingleSlot(targetKey) {
+            const placedKey = gameState.userAnswers[targetKey];
+            if (!placedKey) return;
+
+            const trayCards = document.querySelectorAll('.card-answer');
+            trayCards.forEach(card => {
+                if (card.dataset.key === placedKey) {
+                    card.style.display = 'inline-flex';
+                    card.style.opacity = '1';
+                    card.dataset.placed = "false";
+                }
+            });
+
+            const dz = document.querySelector(`.drop-zone[data-key="${targetKey}"]`);
+            if (dz) {
+                dz.classList.remove('filled');
+                dz.innerText = 'DROP JAWABAN DI SINI';
+            }
+
+            gameState.userAnswers[targetKey] = null;
+            playFx('click');
+            checkAllSlotsFilled();
+        }
+
+        function checkAllSlotsFilled() {
+            const filledCount = Object.values(gameState.userAnswers).filter(val => val !== null).length;
+            document.getElementById('check-btn').disabled = (filledCount < 6);
+        }
+
+        function checkMindMap() {
+            let allCorrect = true;
+            Object.keys(gameState.userAnswers).forEach(key => {
+                if (gameState.userAnswers[key] !== key) {
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                playFx('fanfare');
+                triggerConfetti();
+
+                const currentNationData = mission4Data[gameState.selectedNation];
+                
+                const extraHTML = `
+                    <div class="keyword-highlight-box">
+                        <p style="font-size: 0.95rem; font-weight: 700;">📝 CATAT KEYWORD-MU DI MISI EMPAT INI:</p>
+                        <div class="keyword-badge">${currentNationData.keyword}</div>
+                    </div>
+                `;
+
+                showModal(
+                    '🎉 SELAMAT! MIND MAP LENGKAP!',
+                    `Luar biasa! Semua informasi kedatangan hingga masa penjajahan ${currentNationData.flag} ${currentNationData.name} telah tersusun sempurna.\n\nJangan lupa catat keyword di atas untuk menyelesaikan teka-teki utama nanti!`,
+                    '⭐',
+                    () => {
+                        showPage('page-4');
+                    },
+                    extraHTML
+                );
+            } else {
+                playFx('wrong');
+                showModal('⚠️ PERIKSA KEMBALI', 'Masih ada posisi informasi yang kurang tepat pada node mind map. Kamu bisa mengeklik kartu yang sudah dipasang untuk mengganti!', '🧭');
+            }
+        }
+
+        function renderPresentationMode() {
+            const data = mission4Data[gameState.selectedNation];
+            document.getElementById('pres-country-title').innerText = `PETA CERITA SEJARAH: KISAH ${data.flag} ${data.name.toUpperCase()}`;
+
+            const grid = document.getElementById('pres-card-grid');
+            grid.innerHTML = '';
+
+            const items = [
+                { title: "👤 TOKOH & TAHUN KEDATANGAN", key: "tokoh", color: "#06b6d4" },
+                { title: "📍 TEMPAT & JALUR PERJALANAN", key: "tempat", color: "#10b981" },
+                { title: "🎯 TUJUAN & KEBIJAKAN PENJAJAHAN", key: "tujuan", color: "#ec4899" },
+                { title: "✅ DAMPAK POSITIF", key: "positif", color: "#8b5cf6" },
+                { title: "❌ DAMPAK NEGATIF", key: "negatif", color: "#ef4444" },
+                { title: "⚔️ PERLAWANAN RAKYAT & AKHIR", key: "perlawanan", color: "#eab308" }
+            ];
+
+            items.forEach(item => {
+                const nodeData = data.nodes[item.key];
+                const card = document.createElement('div');
+                card.className = 'pres-item';
+                card.style.setProperty('--item-color', item.color);
+
+                card.innerHTML = `
+                    <div class="pres-item-title">${item.title}</div>
+                    <div class="pres-item-body">${nodeData.text}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function finishPresentation() {
+            playFx('fanfare');
+            triggerConfetti();
+            showPage('page-5');
+        }
+
+        function completeMission4() {
+            playFx('click');
+            const saveData = {
+                selectedNation: gameState.selectedNation,
+                completed: true,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('mission4_state', JSON.stringify(saveData));
+            showPage('page-0');
+        }
+
+        function showModal(title, desc, icon = '🎉', callback = null, extraHTML = '') {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = desc;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('modal-extra-content').innerHTML = extraHTML;
+            
+            const btn = document.getElementById('modal-btn');
+            btn.onclick = () => {
+                closeModal();
+                if (callback) callback();
+            };
+
+            document.getElementById('modal-popup').classList.add('active');
+        }
+
+        function closeModal() {
+            playFx('click');
+            document.getElementById('modal-popup').classList.remove('active');
+            document.getElementById('modal-extra-content').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
